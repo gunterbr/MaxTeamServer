@@ -21,11 +21,11 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '10mb' }))
 
-const dbName = 'heroku_5bf70bc97fafbd9';
+const dbName = 'heroku_32d81130ecf6ed6';
 const db = mysql.createConnection({
 	host: "us-cdbr-east-06.cleardb.net",
-	user: "bd29fef3837f6f",
-	password: "b3ac7abf",
+	user: "b33469aedec849",
+	password: "3d2266c4",
 });
 
 const sqlDB = `CREATE DATABASE IF NOT EXISTS ${dbName}`;
