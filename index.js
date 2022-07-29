@@ -61,7 +61,7 @@ db.query(sqlDB, (error) => {
 });
 
 //USUÁRIOS
-app.post('/api/login', (req, res) => {
+app.get('/api/login', (req, res) => {
 	const { username, password } = req.body;
 	
 	let mysql = `SELECT * FROM ${dbName}.login WHERE username = ? AND password = ?`;
