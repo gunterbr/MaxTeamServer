@@ -6,8 +6,6 @@ const bodyParser = require('body-parser')
 const app = express()
 app.use(cors())
 
-const PORT = process.env.PORT || 3001;
-
 // Adicionar os cabeçalhos Access-Control-Allow-Origin
 app.use((req, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", "https://maxteam-client.herokuapp.com");
@@ -169,6 +167,6 @@ app.delete("/delete/:id", (req, res) => {
 	});
 });
 
-app.listen(PORT, () => {
-	console.log(`Server on port ${PORT}`);
+app.listen(process.env.PORT || 3000, function(){
+	console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
