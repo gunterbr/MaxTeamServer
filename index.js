@@ -23,7 +23,7 @@ app.post('/newuser', (req, res) => {
   const check = `SELECT count(username) FROM login WHERE username = ?`
   connection.query(check, username, (error, count) => {
     if (error) throw error
-    if (count > 0) {
+    if (count(username) > 0) {
       res.send('Username não disponível!')
       return
     }
