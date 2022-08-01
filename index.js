@@ -28,39 +28,7 @@ const db = mysql.createConnection({
 	password: process.env.MYSQL_PASSWORD,
 });
 
-const sqlDB = `CREATE DATABASE IF NOT EXISTS ${dbName}`;
-const sqlUsers = `CREATE TABLE IF NOT EXISTS ${dbName}.login(
-  id int NOT NULL AUTO_INCREMENT UNIQUE,
-  user varchar(150) NOT NULL,
-  username varchar(150) NOT NULL UNIQUE,
-  password varchar(200) NOT NULL,
-  PRIMARY KEY (ID)
-);`;
-const sqlEvents = `CREATE TABLE IF NOT EXISTS ${dbName}.events(
-  id int NOT NULL AUTO_INCREMENT UNIQUE,
-  username varchar(150) NOT NULL,
-  backgroundColor varchar(20) NOT NULL UNIQUE,
-  title varchar(150) NOT NULL UNIQUE,
-  start varchar(150) NOT NULL,
-  end varchar(150) NOT NULL,
-  PRIMARY KEY (ID)
-);`;
 
-db.query(sqlDB, (error) => {
-  if(error) return console.log(error);
-  console.log('DB: OK!');
-
-	db.query(sqlUsers, (error) => {
-		if(error) return console.log(error);
-		console.log('Table user: OK!');
-	});
-		
-	db.query(sqlEvents, (error) => {
-		if(error) return console.log(error);
-		console.log('Table event: OK!');
-	});
-
-});
 
 //USUÁRIOS
 app.post('/api/login', (req, res) => {
