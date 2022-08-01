@@ -22,14 +22,19 @@ app.post('/add', (req, res) => {
 
   const verificar_username = `SELECT username FROM login WHERE username = ${username}`
 
-  if(!verificar_username) {
+  if(verificar_username > 0) {
 
-    
-      res.send(`Não tem: ${username}`)
-    
-  
+    res.send('Este username já está sendo utilizado!')
+
   } else {
-    res.send(`Tem: ${username}`)
+
+    const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
+
+    connection.query(sql, [user, username, password], error => {
+      if (error) throw error
+      res.send('Usuário cadastrado com sucesso!')
+    })
+    
   }
 })
 
