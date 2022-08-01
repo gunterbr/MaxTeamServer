@@ -16,26 +16,25 @@ app.get('/', (req, res) => {
   res.send('Welcome to my API!')
 })
 
-app.post('/add', (req, res) => {
+app.post('/newuser', (req, res) => {
   
   const { user, username, password } = req.body
 
-  const verificar_username = `SELECT count(username) FROM login WHERE username = ${username}`
+  const check = `SELECT count(username) FROM login WHERE username = ?`
+  connection.query(check, username, result, error => {
+    if (error) throw error
+    if (result > 0) {
+      res.send('Este username já está sendo utilizado!')
+      return
+    }
+  })
 
-  if(verificar_username) {
+  const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
+  connection.query(sql, [user, username, password], error => {
+    if (error) throw error
+    res.send('Usuário cadastrado com sucesso!')
+  })
 
-    res.send(`Este username já está sendo utilizado! verifi: ${verificar_username}`)
-
-  } else {
-
-    const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
-
-    connection.query(sql, [user, username, password], error => {
-      if (error) throw error
-      res.send('Usuário cadastrado com sucesso! verifi: ${verificar_username}')
-    })
-
-  }
 })
 
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`))
