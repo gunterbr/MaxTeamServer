@@ -22,9 +22,9 @@ app.post('/add', (req, res) => {
 
   const verificar_username = `SELECT count(username) FROM login WHERE username = ${username}`
 
-  if(verificar_username > 0) {
+  if(verificar_username) {
 
-    res.send('Este username já está sendo utilizado!')
+    res.send(`Este username já está sendo utilizado! verifi: ${verificar_username}`)
 
   } else {
 
@@ -32,7 +32,7 @@ app.post('/add', (req, res) => {
 
     connection.query(sql, [user, username, password], error => {
       if (error) throw error
-      res.send('Usuário cadastrado com sucesso!')
+      res.send('Usuário cadastrado com sucesso! verifi: ${verificar_username}')
     })
 
   }
