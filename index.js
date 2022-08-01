@@ -16,6 +16,20 @@ app.get('/', (req, res) => {
   res.send('Welcome to my API!');
 });
 
+app.post('/add', (req, res) => {
+  const sql = 'INSERT INTO customers SET ?';
+
+  const customerObj = {
+    name: req.body.name,
+    city: req.body.city
+  };
+
+  connection.query(sql, customerObj, error => {
+    if (error) throw error;
+    res.send('Customer created!');
+  });
+});
+
 connection.connect(error => {
   if (error) throw error;
   console.log('Database server running!');
