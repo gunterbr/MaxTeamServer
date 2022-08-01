@@ -29,11 +29,7 @@ app.post('/newuser', (req, res) => {
     }
   })
 
-  const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
-  connection.query(sql, [user, username, password], error => {
-    if (error) throw error
-    res.send('Usuário cadastrado com sucesso!')
-  })
+  
 
 })
 
