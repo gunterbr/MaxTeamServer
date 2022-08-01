@@ -20,7 +20,7 @@ app.post('/add', (req, res) => {
   
   const { user, username, password } = req.body
 
-  const verificar_username = `SELECT username FROM login WHERE username = ${username}`
+  const verificar_username = `SELECT count(username) FROM login WHERE username = ${username}`
 
   if(verificar_username > 0) {
 
@@ -34,7 +34,7 @@ app.post('/add', (req, res) => {
       if (error) throw error
       res.send('Usuário cadastrado com sucesso!')
     })
-    
+
   }
 })
 
