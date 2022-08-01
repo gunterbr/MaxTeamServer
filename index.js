@@ -1,8 +1,4 @@
 const express = require('express');
-const mysql = require('mysql');
-const bodyParser = require('body-parser');
-
-const PORT = process.env.PORT || 3050;
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,24 +14,9 @@ app.get('/', (req, res) => {
   res.send('Welcome to my API!');
 });
 
-app.post('/add', (req, res) => {
-  const sql = 'INSERT INTO login SET ?';
-
-  const customerObj = {
-    user: req.body.user,
-    username: req.body.username,
-	password: req.body.password
-  };
-
-  connection.query(sql, customerObj, error => {
-    if (error) throw error;
-    res.send('Customer created!');
-  });
-});
-
 connection.connect(error => {
   if (error) throw error;
   console.log('Database server running!');
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
