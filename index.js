@@ -53,7 +53,7 @@ app.post('/api/login', (req, res) => {
 app.get('/api/newuser', (req, res) => {
 	const { user, username, password } = req.body;
 
-	if(!user && !username && !password) {
+	if(!user || !username || !password) {
 		res.status(400).send('Preencha todos os campos')
 	} else {
 	
