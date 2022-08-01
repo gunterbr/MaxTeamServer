@@ -17,11 +17,12 @@ app.get('/', (req, res) => {
 });
 
 app.post('/add', (req, res) => {
-  const sql = 'INSERT INTO customers SET ?';
+  const sql = 'INSERT INTO login SET ?';
 
   const customerObj = {
-    name: req.body.name,
-    city: req.body.city
+    user: req.body.user,
+    username: req.body.username,
+    password: req.body.password
   };
 
   connection.query(sql, customerObj, error => {
