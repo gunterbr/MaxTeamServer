@@ -24,11 +24,15 @@ app.post('/newuser', (req, res) => {
   connection.query(check, username, (error, count) => {
     if (error) throw error
     
-      res.send(count.username)
+      res.send(count.values)
       
   })
 
-  
+  //const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
+  //connection.query(sql, [user, username, password], error => {
+  //  if (error) throw error
+  //  res.send('Usuário cadastrado com sucesso!')
+  //})
 
 })
 
