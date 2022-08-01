@@ -21,7 +21,7 @@ app.post('/newuser', (req, res) => {
   const { user, username, password } = req.body
 
   const check = `SELECT count(username) FROM login WHERE username = ?`
-  connection.query(check, [user, username, password], (error, count) => {
+  connection.query(check, username, (error, count) => {
     if (error) throw error
     
       res.send(count)
