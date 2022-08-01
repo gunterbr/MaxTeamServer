@@ -25,11 +25,11 @@ app.post('/add', (req, res) => {
   if(!verificar_username) {
 
     
-      res.send(`${username}`)
+      res.send(`Não tem: ${username}`)
     
   
   } else {
-    res.send(`${username}`)
+    res.send(`Tem: ${username}`)
   }
 })
 
