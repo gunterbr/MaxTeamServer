@@ -50,7 +50,7 @@ app.post('/api/login', (req, res) => {
 	});
 });
 
-app.post('/api/newuser', (req, res) => {
+app.get('/api/newuser', (req, res) => {
 	const { user, username, password } = req.body;
 
 	if(!user && !username && !password) {
