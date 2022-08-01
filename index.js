@@ -53,9 +53,7 @@ app.post('/api/login', (req, res) => {
 app.post('/api/newuser', (req, res) => {
 	const { user, username, password } = req.body;
 
-	if(!user || !username || !password) {
-		res.status(400).send('Preencha todos os campos')
-	} else {
+	
 	
 	let mysql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`;
 	db.query(mysql, [user, username, password], (err, result) => {
@@ -73,7 +71,7 @@ app.post('/api/newuser', (req, res) => {
 			}
 		}
 	});
-	}
+	
 });
 
 //EVENTOS
