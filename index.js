@@ -24,7 +24,7 @@ app.post('/add', (req, res) => {
     password
   } = req.body;
 
-  const sql = `INSERT INTO login (user, username, password) VALUES ?, ?, ?`;
+  const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`;
 
   connection.query(sql, [user, username, password], error => {
     if (error) throw error;
