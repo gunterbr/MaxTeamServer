@@ -32,9 +32,4 @@ app.post('/add', (req, res) => {
   });
 });
 
-connection.connect(error => {
-  if (error) throw error;
-  console.log('Database server running!');
-});
-
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
