@@ -1,12 +1,12 @@
 const express = require('express')
-const cors = require('cors')
 const mysql = require('mysql')
 const bodyParser = require('body-parser')
 
 const app = express()
-app.use(cors())
 
-// Adicionar os cabeçalhos Access-Control-Allow-Origin
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -21,14 +21,11 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json({ limit: '10mb' }))
-
-const dbName = 'heroku_32d81130ecf6ed6';
+const dbName = process.env.MYSQL_DATABASE;
 const db = mysql.createConnection({
-	host: "us-cdbr-east-06.cleardb.net",
-	user: "b33469aedec849",
-	password: "3d2266c4",
+	host: process.env.MYSQL_HOST,
+	user: process.env.MYSQL_USER,
+	password: process.env.MYSQL_PASSWORD,
 });
 
 const sqlDB = `CREATE DATABASE IF NOT EXISTS ${dbName}`;
