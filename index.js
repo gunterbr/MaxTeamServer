@@ -18,15 +18,15 @@ app.get('/', (req, res) => {
 
 app.post('/add', (req, res) => {
   
-  const customerObj = {
-    user: req.body.user,
-    username: req.body.username,
-    password: req.body.password
-  };
+  const {
+    user,
+    username,
+    password
+  } = req.body;
 
-  const sql = 'INSERT INTO login (user, username, password) VALUES ?';
+  const sql = `INSERT INTO login (user, username, password) VALUES ?`;
 
-  connection.query(sql, customerObj, error => {
+  connection.query(sql, [user, username, password], error => {
     if (error) throw error;
     res.send('Customer created!');
   });
