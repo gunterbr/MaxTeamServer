@@ -21,20 +21,18 @@ app.use((req, res, next) => {
     next();
 });
 
-const dbName = process.env.MYSQL_DATABASE;
 const db = mysql.createConnection({
 	host: process.env.MYSQL_HOST,
+	database: process.env.MYSQL_DATABASE,
 	user: process.env.MYSQL_USER,
 	password: process.env.MYSQL_PASSWORD,
 });
-
-
 
 //USUÁRIOS
 app.post('/api/login', (req, res) => {
 	const { username, password } = req.body;
 	
-	let mysql = `SELECT * FROM ${dbName}.login WHERE username = ? AND password = ?`;
+	let mysql = `SELECT * FROM login WHERE username = ? AND password = ?`;
 	db.query(mysql, [username, password], (err, result) => {
 		if (err) {
 			res.status(500).send(err)
@@ -59,7 +57,7 @@ app.post('/api/newuser', (req, res) => {
 		res.status(400).send('Preencha todos os campos')
 	} else {
 	
-	let mysql = `INSERT INTO ${dbName}.login (user, username, password) VALUES (?, ?, ?)`;
+	let mysql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`;
 	db.query(mysql, [user, username, password], (err, result) => {
 		if (err) {
 			res.status(500).send(err)
@@ -82,7 +80,7 @@ app.post('/api/newuser', (req, res) => {
 app.post("/register", (req, res) => {
 	const { username, title, start, end, backgroundColor } = req.body;
   
-	let mysql = `INSERT INTO ${dbName}.events (username,backgroundColor, title, start, end) VALUES (?, ?, ?, ?, ?)`;
+	let mysql = `INSERT INTO events (username,backgroundColor, title, start, end) VALUES (?, ?, ?, ?, ?)`;
 	db.query(mysql, [username, backgroundColor, title, start, end], (err, result) => {
 		if(err) return console.log("Verifique as informações e tente novamente!")
 		res.send(result);
@@ -93,7 +91,7 @@ app.get("/search", (req, res) => {
 	const { title, username } = req.body;
 
 	let mysql =
-	  `SELECT * FROM ${dbName}.events WHERE title = ? AND username = ?`;
+	  `SELECT * FROM events WHERE title = ? AND username = ?`;
 	db.query(mysql, [title, username], (err, result) => {
 	  if (err) res.send(err);
 	  res.send(result);
@@ -104,7 +102,7 @@ app.get("/getCards/:username", (req, res) => {
 	const { username } = req.params;
 
 	let mysql =
-	  `SELECT * FROM ${dbName}.events WHERE username = ?`;
+	  `SELECT * FROM events WHERE username = ?`;
 	db.query(mysql, username, (err, result) => {
 	  if (err) res.send(err);
 	  res.send(result);
@@ -114,7 +112,7 @@ app.get("/getCards/:username", (req, res) => {
 app.put("/edit", (req, res) => {
 	const { id, title, start, end } = req.body;
 	
-	let mysql = `UPDATE ${dbName}.events SET title = ?, start = ?, end = ? WHERE id = ?`;
+	let mysql = `UPDATE events SET title = ?, start = ?, end = ? WHERE id = ?`;
 	db.query(mysql, [title, start, end, id], (err, result) => {
 	  if (err) {
 		res.send(err);
@@ -127,7 +125,7 @@ app.put("/edit", (req, res) => {
 app.delete("/delete/:id", (req, res) => {
 	const { id } = req.params;
 	
-	let mysql = `DELETE FROM ${dbName}.events WHERE id = ?`;
+	let mysql = `DELETE FROM events WHERE id = ?`;
 	db.query(mysql, id, (err, result) => {
 	  if (err) {
 		console.log(err);
