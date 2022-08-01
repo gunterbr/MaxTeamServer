@@ -17,13 +17,14 @@ app.get('/', (req, res) => {
 });
 
 app.post('/add', (req, res) => {
-  const sql = 'INSERT INTO login SET ?';
-
+  
   const customerObj = {
     user: req.body.user,
     username: req.body.username,
     password: req.body.password
   };
+
+  const sql = 'INSERT INTO login (user, username, password) VALUES (?, ?, ?)';
 
   connection.query(sql, customerObj, error => {
     if (error) throw error;
