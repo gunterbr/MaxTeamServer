@@ -24,15 +24,12 @@ app.post('/add', (req, res) => {
 
   if(!verificar_username) {
 
-    const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
-
-    connection.query(sql, [user, username, password], error => {
-      if (error) throw error
-      res.send('Usuário cadastrado com sucesso!')
-    })
+    
+      res.send(`${username}`)
+    
   
   } else {
-    res.send('Este username já está sendo utilizado!')
+    res.send(`${username}`)
   }
 })
 
