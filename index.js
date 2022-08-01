@@ -50,31 +50,39 @@ app.post('/api/login', (req, res) => {
 	});
 });
 
-app.get('/api/newuser', (req, res) => {
-	const { user, username, password } = req.body;
+const createUser = async (req, res, next) => {
 
-	if(!user || !username || !password) {
-		res.status(400).send('Preencha todos os campos')
-	} else {
-	
-	let mysql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`;
-	db.query(mysql, [user, username, password], (err, result) => {
-		if (err) {
-			res.status(500).send(err)
-		} else {
-			if (result.affectedRows > 0) {
-				res.status(200).send({
-					"user": result.user,
-					"username": result.username,
-					"password": result.password
-				})
-			} else {
-				res.status(400).send('Tente um username diferente')
-			}
-		}
-	});
-	}
-});
+    try {
+        // var query = `SELECT * FROM users WHERE email = ?`;
+        // var result = await mysql.execute(query, [req.body.email]);
+
+        // if (result.length > 0) {
+        //     return res.status(409).send({ message: 'Usuário já cadastrado' })
+        // }
+
+        // const hash = await bcrypt.hashSync(req.body.password, 10);
+
+        const users = req.body.users.map(user => [
+            user.user,
+            user.username,
+			user.password
+        ])
+
+        query = 'INSERT INTO users (user, username, password) VALUES ?';
+        const results = await mysql.execute(query, [ users ]);
+
+        const response = {
+            message: 'Usuário criado com sucesso',
+            createdUsers: req.body.users.map(user => { return { email: user.email } })
+        }
+        return res.status(201).send(response);
+
+    } catch (error) {
+        return res.status(500).send({ error: error });
+    }
+};
+
+app.post('/api/newuser', createUser);
 
 //EVENTOS
 app.post("/register", (req, res) => {
