@@ -4,7 +4,6 @@ const bodyParser = require('body-parser')
 
 const app = express()
 
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -51,9 +50,9 @@ app.post('/api/login', (req, res) => {
 });
 
 app.post('/api/newuser', (req, res) => {
-	const { user } = req.body.user;
-	const { username } = req.body.username;
-	const { password } = req.body.password;
+	const user = req.body.user;
+	const username = req.body.username;
+	const password = req.body.password;
 
 	if(!user || !username || !password) {
 		res.status(400).send('Preencha todos os campos')
