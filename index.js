@@ -17,23 +17,16 @@ app.get('/', (req, res) => {
 })
 
 app.post('/newuser', (req, res) => {
-  
+
   const { user, username, password } = req.body
 
   const check = `SELECT count(username) FROM login WHERE username = ?`
-  connection.query(check, username, result, error => {
+  connection.query(check, [user, username, password], error, count => {
     if (error) throw error
-    if (result > 0) {
-      res.send('Este username já está sendo utilizado!')
-      return
-    }
+    res.send(count)
   })
 
-  const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
-  connection.query(sql, [user, username, password], error => {
-    if (error) throw error
-    res.send('Usuário cadastrado com sucesso!')
-  })
+  
 
 })
 
