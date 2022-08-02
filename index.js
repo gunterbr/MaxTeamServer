@@ -80,10 +80,10 @@ app.post('/login', (req, res) => {
 //Inscrição
 app.post('/inscricao', (req, res) => {
 
-  const { candidato, evento, pagamento } = req.body
+  const { nomeCandidato, evento, pagamento, numeroInscricao } = req.body
 
-  const query = `INSERT INTO inscricao (nomeCandidato, evento, pagamento) VALUES (?, ?, ?)`
-  connection.query(query, [candidato, evento, pagamento], err => {
+  const query = `INSERT INTO inscricao (nomeCandidato, evento, pagamento, numeroInscricao) VALUES (?, ?, ?)`
+  connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
     if (err) throw err
     res.send('Inscrição realizada!')
   })
