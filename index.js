@@ -24,7 +24,7 @@ app.post('/newuser', (req, res) => {
   connection.query(check, username, (error, count) => {
     if (error) throw error
     
-      res.send(count.response)
+      res.send(count)
       
   })
 
