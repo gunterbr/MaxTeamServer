@@ -22,9 +22,10 @@ app.post('/newuser', (req, res) => {
 
   const check = `SELECT COUNT(username) AS equalUser FROM login WHERE username = ?`
   connection.query(check, username, (error, count) => {
+    numRows = count.affectedRows;
     if (error) throw error
     
-      res.send(count[0].equalUser)
+      res.send(numRows)
       
   })
 
