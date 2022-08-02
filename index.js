@@ -23,7 +23,6 @@ app.post('/newuser', (req, res) => {
   const check = `SELECT COUNT(*) AS equalUser FROM login WHERE username = ?`
   connection.query(check, username, (err, count) => {
     const result = JSON.stringify(count[0].equalUser)
-    if (err) throw err
     if (result > 0) {
       res.send('Username indisponível!')
       return
