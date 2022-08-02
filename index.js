@@ -22,18 +22,19 @@ app.post('/newuser', (req, res) => {
 
   const check = `SELECT COUNT(*) AS equalUser FROM login WHERE username = ?`
   connection.query(check, username, (err, count) => {
-
+    const result = JSON.stringify(count[0].equalUser)
     if (err) throw err
-    
-      res.send(JSON.stringify(count[0].equalUser))
-      
+    if (result > 0) {
+      res.send('Username indisponível!')
+      return
+    }
   })
 
-  //const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
-  //connection.query(sql, [user, username, password], err => {
-  //  if (err) throw err
-  //  res.send('Usuário cadastrado com sucesso!')
-  //})
+  const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
+  connection.query(sql, [user, username, password], err => {
+    if (err) throw err
+    res.send('Usuário cadastrado com sucesso!')
+  })
 
 })
 
