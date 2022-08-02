@@ -20,11 +20,11 @@ app.post('/newuser', (req, res) => {
 
   const { user, username, password } = req.body
 
-  const check = `SELECT count(username) FROM login WHERE username = ?`
+  const check = `SELECT COUNT(username) AS equalUser FROM login WHERE username = ?`
   connection.query(check, username, (error, count) => {
     if (error) throw error
     
-      res.send(count.data.length)
+      res.send(count[0].equalUser)
       
   })
 
