@@ -82,10 +82,20 @@ app.post('/inscricao', (req, res) => {
 
   const { nomeCandidato, evento, pagamento, numeroInscricao } = req.body
 
+  const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
   const query = `INSERT INTO inscricao (nomeCandidato, evento, pagamento, numeroInscricao) VALUES (?, ?, ?, ?)`
-  connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
+
+  connection.query(check, numeroInscricao, (err, count) => {
+    const result = JSON.stringify(count[0].equalInscricao)
     if (err) throw err
-    res.send('Inscrição realizada!')
+    if (result > 0) {
+      res.send('Tivemos um problema a gerar seu número de inscrição :(\nPor favor, tente novamente!')
+    } else {
+      connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
+        if (err) throw err
+        res.send('Inscrição realizada!')
+      })
+    }
   })
 
 })
