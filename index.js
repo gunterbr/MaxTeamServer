@@ -66,13 +66,8 @@ app.post('/inscricao', (req, res) => {
 
   const { candidato, evento, pagamento } = req.body
 
-  const query = 'INSERT INTO inscricao SET ?',
-        values = {
-          nomeCandidato: candidato,
-          evento: evento,
-          pagamento: pagamento
-        }
-  connection.query(query, values, err => {
+  const query = `INSERT INTO inscricao (nomeCandidato, evento, pagamento) VALUES (?, ?, ?)`
+  connection.query(query, [candidato, evento, pagamento], err => {
     if (err) throw err
     res.send('Inscrição realizada!')
   })
