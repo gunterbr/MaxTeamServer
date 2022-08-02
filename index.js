@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '10mb' }))
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -55,9 +55,25 @@ app.post('/newuser', (req, res) => {
 })
 
 //Login
-app.get('/login', (req, res) => {
+app.post('/login', (req, res) => {
 
+  const { username, password } = req.body
+	
+	const query = `SELECT * FROM login WHERE username = ? AND password = ?`
 
+	connection.query(query, [username, password], (err, result) => {
+		if (err) throw err
+		if (result.length > 0) {
+			res.send({
+				"id": result[0].id,
+				"user": result[0].user,
+				"username": result[0].username
+			})
+		} else {
+			res.status(400).send('Usuário ou senha incorretos!')
+		}
+
+	})
 
 })
 
