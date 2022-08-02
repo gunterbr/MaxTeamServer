@@ -25,7 +25,7 @@ app.post('/newuser', (req, res) => {
 
     if (err) throw err
     
-      res.send(JSON.stringify(count))
+      res.send(JSON.stringify(count[0].equalUser))
       
   })
 
