@@ -25,7 +25,7 @@ app.post('/newuser', (req, res) => {
     const result = JSON.stringify(count[0].equalUser)
     if (result > 0) {
       res.send('Username indisponível!')
-      return
+      process.exit(1)
     }
   })
 
