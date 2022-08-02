@@ -20,17 +20,18 @@ app.post('/newuser', (req, res) => {
 
   const { user, username, password } = req.body
 
-  const check = `SELECT * FROM login WHERE username = ?`
-  connection.query(check, username, (error, count) => {
-    if (error) throw error
+  const check = `SELECT COUNT(*) AS equalUser FROM login WHERE username = ?`
+  connection.query(check, username, (err, count) => {
+
+    if (err) throw err
     
-      res.send(count.length)
+      res.send(count[0].equalUser)
       
   })
 
   //const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
-  //connection.query(sql, [user, username, password], error => {
-  //  if (error) throw error
+  //connection.query(sql, [user, username, password], err => {
+  //  if (err) throw err
   //  res.send('Usuário cadastrado com sucesso!')
   //})
 
