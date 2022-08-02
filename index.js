@@ -27,6 +27,7 @@ app.post('/newuser', (req, res) => {
       res.send('Username indisponível!')
       process.exit(1)
     }
+    connection.end()
   })
 
   const sql = `INSERT INTO login (user, username, password) VALUES (?, ?, ?)`
@@ -35,6 +36,7 @@ app.post('/newuser', (req, res) => {
       res.send('Usuário cadastrado com sucesso!')
       process.exit(1)
     }
+    connection.end()
   })
 
 })
