@@ -26,6 +26,7 @@ app.post('/newuser', (req, res) => {
     if (err) throw err
     if (result > 0) {
       res.send('Username indisponível!')
+      process.exit(1)
     }
   })
 
@@ -33,6 +34,7 @@ app.post('/newuser', (req, res) => {
   connection.query(sql, [user, username, password], err => {
     if (err) throw err
     res.send('Usuário cadastrado com sucesso!')
+    process.exit(1)
   })
 
 })
