@@ -109,7 +109,7 @@ app.put('/confirmar', (req, res) => {
 
 	connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
 	  if (err) throw err
-		res.send(result.affectedRows);
+		res.send(result);
 	});
 
 })
