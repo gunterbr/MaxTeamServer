@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 
   if (req.method === 'OPTIONS') {
       res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET')
-      return res.sendStatus(200).send({})
+      return res.status(200).send({})
   }
   next()
 })
@@ -103,14 +103,17 @@ app.post('/inscricao', (req, res) => {
 //Confirmar Inscrição
 app.put('/confirmar', (req, res) => {
 
-  const { deferida, responsavel, id, numeroInscricao } = req.body
+  const { deferida, responsavel, id, numeroInscricao } = req.body;
+	
+	const query = `UPDATE inscricao SET deferida = ?, responsavel = ? WHERE id = ? AND numeroInscricao = ?`
 
-  const query = `UPDATE inscricao SET deferida = ?, responsavel = ? WHERE id = ? AND numeroInscricao = ?`
-
-  connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
-    if (err) throw err
-    res.send(result.affectedRows)
-  })
+	connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
+	  if (err) {
+		  res.send(err);
+	  } else {
+		  res.send(result);
+	  }
+	});
 
 })
 
