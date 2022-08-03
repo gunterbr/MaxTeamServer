@@ -110,7 +110,9 @@ app.put('/confirmar', (req, res) => {
 	connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
 	  const count = JSON.stringify(result.affectedRows)
     if (err) throw err
-		res.send(count)
+		if (count > 0) {
+      res.send('Inscrição confirmada com sucesso!')
+    }
 	});
 
 })
