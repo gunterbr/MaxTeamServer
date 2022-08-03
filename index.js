@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 
   if (req.method === 'OPTIONS') {
       res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET')
-      return res.status(200).send({})
+      return res.sendStatus(200).send({})
   }
   next()
 })
@@ -70,7 +70,7 @@ app.get('/login', (req, res) => {
 				"username": result[0].username
 			})
 		} else {
-			res.status(400).send('Usuário ou senha incorretos!')
+			res.send('Usuário ou senha incorretos!')
 		}
 
 	})
