@@ -41,14 +41,17 @@ app.post('/newuser', (req, res) => {
 
   connection.query(check, username, (err, count) => {
     const result = JSON.stringify(count[0].equalUser)
-    if (err) throw err
-    if (result > 0) {
-      res.send('Username indisponível!')
+    if (err) {
+      res.status(500).send(err)
     } else {
-      connection.query(query, [user, username, password], err => {
-        if (err) throw err
-        res.send('Usuário cadastrado com sucesso!')
-      })
+      if (result > 0) {
+        res.status(400).send('Username indisponível!')
+      } else {
+        connection.query(query, [user, username, password], err => {
+          if (err) throw err
+          res.status(200).send('Usuário cadastrado com sucesso!')
+        })
+      }
     }
   })
 
@@ -72,7 +75,7 @@ app.post('/login', (req, res) => {
           "username": result[0].username
         })
       } else {
-        res.status(400).send('Usuário ou senha incorretos');
+        res.status(400).send('Usuário ou senha incorretos!')
       }
     }
 	})
@@ -89,14 +92,17 @@ app.post('/inscricao', (req, res) => {
 
   connection.query(check, numeroInscricao, (err, count) => {
     const result = JSON.stringify(count[0].equalInscricao)
-    if (err) throw err
-    if (result > 0) {
-      res.send('Tivemos um problema a gerar seu número de inscrição :(\nPor favor, tente novamente!')
+    if (err) {
+      res.status(500).send(err)
     } else {
-      connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
-        if (err) throw err
-        res.send('Inscrição realizada!')
-      })
+      if (result > 0) {
+        res.status(400).send('Tivemos um problema a gerar seu número de inscrição :(\nPor favor, tente novamente!')
+      } else {
+        connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
+          if (err) throw err
+          res.status(200).send('Inscrição realizada!')
+        })
+      }
     }
   })
 
@@ -105,17 +111,20 @@ app.post('/inscricao', (req, res) => {
 //Confirmar Inscrição
 app.put('/confirmar', (req, res) => {
 
-  const { deferida, responsavel, id, numeroInscricao } = req.body;
+  const { deferida, responsavel, id, numeroInscricao } = req.body
 	
 	const query = `UPDATE inscricao SET deferida = ?, responsavel = ? WHERE id = ? AND numeroInscricao = ?`
 
 	connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
 	  const count = JSON.stringify(result.affectedRows)
-    if (err) throw err
-		if (count > 0) {
-      res.send('Inscrição confirmada com sucesso!')
+    if (err) {
+      res.status(500).send(err)
+    } else {
+      if (count > 0) {
+        res.status(200).send('Inscrição confirmada com sucesso!')
+      }
     }
-	});
+	})
 
 })
 
