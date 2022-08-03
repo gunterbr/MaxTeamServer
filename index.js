@@ -62,7 +62,7 @@ app.post('/login', (req, res) => {
 	const query = `SELECT * FROM login WHERE username = ? AND password = ?`
 
 	connection.query(query, [username, password], (err, result) => {
-		if (err) throw err
+		
 		
 			res.send(result)
 		
