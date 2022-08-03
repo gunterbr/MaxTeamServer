@@ -108,8 +108,9 @@ app.put('/confirmar', (req, res) => {
 	const query = `UPDATE inscricao SET deferida = ?, responsavel = ? WHERE id = ? AND numeroInscricao = ?`
 
 	connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
-	  if (err) throw err
-		res.send(result);
+	  const count = JSON.stringify(result.affectedRows)
+    if (err) throw err
+		res.send(count)
 	});
 
 })
