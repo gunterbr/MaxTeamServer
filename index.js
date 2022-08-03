@@ -58,7 +58,7 @@ app.post('/newuser', (req, res) => {
 app.get('/login', (req, res) => {
 
   const { username, password } = req.body
-	
+
 	const query = `SELECT * FROM login WHERE username = ? AND password = ?`
 
 	connection.query(query, [username, password], (err, result) => {
@@ -103,7 +103,14 @@ app.post('/inscricao', (req, res) => {
 //Confirmar Inscrição
 app.put('/confirmar', (req, res) => {
 
-  
+  const { deferida, responsavel, id, numeroInscricao } = req.body
+
+  const query = `UPDATE inscricao SET deferida = ?, responsavel = ? WHERE id = ? AND numeroInscricao = ?`
+
+  connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
+    if (err) throw err
+    res.send(result.affectedRows)
+  })
 
 })
 
