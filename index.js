@@ -55,7 +55,7 @@ app.post('/newuser', (req, res) => {
 })
 
 //Login
-app.post('/login', (req, res) => {
+app.get('/login', (req, res) => {
 
   const { username, password } = req.body
 
