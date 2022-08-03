@@ -64,7 +64,7 @@ app.post('/login', (req, res) => {
 	connection.query(query, [username, password], (err, result) => {
 		if (err) throw err
 		if (result.length > 0) {
-			res.send(result.length)
+			res.send(JSON.stringify(result.length))
 		} else {
 			res.send('Usuário ou senha incorretos!')
 		}
