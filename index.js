@@ -7,8 +7,11 @@ const cors = require("cors")
 const app = express()
 
 app.use(cors())
-app.use(fileupload())
-app.use(express.static("files"))
+app.use(
+  fileupload({
+      createParentPath: true,
+  }),
+)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '10mb' }))
@@ -89,19 +92,33 @@ app.post('/login', (req, res) => {
 
 })
 
-app.post("/upload", (req, res) => {
-  const newpath = __dirname + "/files/"
-  const file = req.files.file
-  const filename = file.name
+app.post("/upload-file", async (req, res) => {
+  try {
+      if (!req.files) {
+          res.send({
+              status: "failed",
+              message: "No file uploaded",
+          });
+      } else {
+          let file = req.files.file
 
-  const { msg } = req.body
+          console.log(req.files)
 
-  file.mv(`${newpath}${filename}`, (err) => {
-    if (err) {
-      res.status(500).send({ message: "File upload failed", code: 200, evento: msg })
-    }
-    res.status(200).send({ message: "File Uploaded", code: 200, evento: msg })
-  })
+          file.mv("./uploads/" + file.name)
+
+          res.send({
+              status: "success",
+              message: "File is uploaded",
+              data: {
+                  name: file.name,
+                  mimetype: file.mimetype,
+                  size: file.size,
+              },
+          })
+      }
+  } catch (err) {
+      res.status(500).send(err)
+  }
 })
 
 //Inscrição
