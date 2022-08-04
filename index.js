@@ -89,12 +89,21 @@ app.post('/login', (req, res) => {
 
 })
 
+app.post("/upload", (req, res) => {
+  const newpath = __dirname + "/files/";
+  const file = req.files.file;
+  const filename = file.name;
+ 
+  file.mv(`${newpath}${filename}`, (err) => {
+    if (err) {
+      res.status(500).send({ message: "File upload failed", code: 200 });
+    }
+    res.status(200).send({ message: "File Uploaded", code: 200 });
+  });
+})
+
 //Inscrição
 app.post('/inscricao', (req, res) => {
-
-  const newpath = __dirname + "/files/"
-  const file = req.files.file
-  const filename = file.name
 
   const { nomeCandidato, evento, pagamento, numeroInscricao } = req.body
 
@@ -112,12 +121,6 @@ app.post('/inscricao', (req, res) => {
         connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
           if (err) throw err
           res.status(200).send('Inscrição realizada!')
-          file.mv(`${newpath}${filename}`, (err) => {
-            if (err) {
-              res.status(500).send({ message: "File upload failed", code: 200 })
-            }
-            res.status(200).send({ message: "File Uploaded", code: 200 })
-          })
         })
       }
     }
