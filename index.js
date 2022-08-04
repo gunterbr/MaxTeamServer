@@ -96,7 +96,7 @@ app.post('/inscricao', (req, res) => {
       res.status(500).send(err)
     } else {
       if (result > 0) {
-        res.status(400).send('Tivemos um problema a gerar seu número de inscrição :(\nPor favor, tente novamente!')
+        res.status(400).send('Tivemos um problema ao gerar seu número de inscrição :(\nPor favor, tente novamente!')
       } else {
         connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
           if (err) throw err
