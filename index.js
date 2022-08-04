@@ -1,31 +1,11 @@
 const express = require('express')
 const mysql = require('mysql2')
+const bodyParser = require('body-parser')
 
 const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
 
-const multer = require('multer');
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-        // Extração da extensão do arquivo original:
-        const extensaoArquivo = file.originalname.split('.')[1];
-
-        // Cria um código randômico que será o nome do arquivo
-        const novoNomeArquivo = require('crypto')
-            .randomBytes(64)
-            .toString('hex');
-
-        // Indica o novo nome do arquivo:
-        cb(null, `${novoNomeArquivo}.${extensaoArquivo}`)
-    }
-});
-
-const upload = multer({ storage });
+app.use(bodyParser.urlencoded({ extended: true }))//old false
+app.use(bodyParser.json({ limit: '10mb' }))
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -104,12 +84,12 @@ app.post('/login', (req, res) => {
 })
 
 //Inscrição
-app.post(('/inscricao', upload.single('pagamento')), (req, res) => {
+app.post('/inscricao', (req, res) => {
 
   const { nomeCandidato, evento, pagamento, numeroInscricao } = req.body
 
   const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
-  const query = `INSERT INTO inscricao (nomeCandidato, evento, numeroInscricao) VALUES (?, ?, ?)`
+  const query = `INSERT INTO inscricao (nomeCandidato, evento, pagamento, numeroInscricao) VALUES (?, ?, ?, ?)`
 
   connection.query(check, numeroInscricao, (err, count) => {
     const result = JSON.stringify(count[0].equalInscricao)
