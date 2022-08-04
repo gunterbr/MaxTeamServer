@@ -90,16 +90,18 @@ app.post('/login', (req, res) => {
 })
 
 app.post("/upload", (req, res) => {
-  const newpath = __dirname + "/files/";
-  const file = req.files.file;
-  const filename = file.name;
- 
+  const newpath = __dirname + "/files/"
+  const file = req.files.file
+  const filename = file.name
+
+  const { msg } = req.body
+
   file.mv(`${newpath}${filename}`, (err) => {
     if (err) {
-      res.status(500).send({ message: "File upload failed", code: 200 });
+      res.status(500).send({ message: "File upload failed", code: 200, evento: msg })
     }
-    res.status(200).send({ message: "File Uploaded", code: 200 });
-  });
+    res.status(200).send({ message: "File Uploaded", code: 200, evento: msg })
+  })
 })
 
 //Inscrição
