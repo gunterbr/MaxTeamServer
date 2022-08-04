@@ -100,7 +100,8 @@ app.post("/upload-file", async (req, res) => {
               message: "No file uploaded",
           });
       } else {
-          let file = req.files.file
+          const file = req.files.file
+          const candidado = req.body
 
           console.log(req.files)
 
@@ -109,6 +110,7 @@ app.post("/upload-file", async (req, res) => {
               status: "success",
               message: "File is uploaded",
               data: {
+                  candidado: candidado.nomeCandidato,
                   name: file.name,
                   mimetype: file.mimetype,
                   size: file.size,
