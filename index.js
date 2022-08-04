@@ -1,8 +1,14 @@
 const express = require('express')
 const mysql = require('mysql2')
 const bodyParser = require('body-parser')
+const fileupload = require("express-fileupload")
+const cors = require("cors")
 
 const app = express()
+
+app.use(cors())
+app.use(fileupload())
+app.use(express.static("files"))
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '10mb' }))
@@ -86,6 +92,10 @@ app.post('/login', (req, res) => {
 //Inscrição
 app.post('/inscricao', (req, res) => {
 
+  const newpath = __dirname + "/files/"
+  const file = req.files.file
+  const filename = file.name
+
   const { nomeCandidato, evento, pagamento, numeroInscricao } = req.body
 
   const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
@@ -102,6 +112,12 @@ app.post('/inscricao', (req, res) => {
         connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
           if (err) throw err
           res.status(200).send('Inscrição realizada!')
+          file.mv(`${newpath}${filename}`, (err) => {
+            if (err) {
+              res.status(500).send({ message: "File upload failed", code: 200 })
+            }
+            res.status(200).send({ message: "File Uploaded", code: 200 })
+          })
         })
       }
     }
