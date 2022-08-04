@@ -2,7 +2,7 @@ CREATE TABLE `inscricao` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nomeCandidato` varchar(45) NOT NULL,
   `evento` varchar(45) NOT NULL,
-  `pagamento` blob NOT NULL,
+  `pagamento` varchar(45) NOT NULL,
   `numeroInscricao` int NOT NULL,
   `deferida` varchar(45) DEFAULT NULL,
   `responsavel` varchar(45) DEFAULT NULL,
