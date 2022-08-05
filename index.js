@@ -114,7 +114,7 @@ app.post('/inscricao', (req, res) => {
 })
 
 app.post("/upload", upload.array('files', 2), (req, res) => {
-  res.send(req.body, req.files)
+  res.send(req.files)
 })
 
 //Confirmar Inscrição
