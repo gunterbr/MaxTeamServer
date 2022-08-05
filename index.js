@@ -114,17 +114,10 @@ app.post('/inscricao', (req, res) => {
 })
 
 app.post("/upload", (req, res) => {
-  const { nomeCandidato, evento, numeroInscricao } = req.body
-  const { filename, mimetype } = req.files
 
   if(upload.array('files', 2)) {
-    console.log({
-      filename: filename,
-      mime: mimetype,
-      nome: nomeCandidato,
-      evento: evento,
-      numeroInscricao: numeroInscricao
-    })
+    console.log(req.body)
+    console.log(req.files)
   }
 
 })
