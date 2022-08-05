@@ -121,7 +121,7 @@ app.post('/inscricao', (req, res) => {
 app.post('/upload', (req, res) => {
 
   const { superHeroName } = req.body
-  const { uploadFile } = req.files
+  const { uploadFile } = req.files[0].name
 
   res.status(500).send({
     name: superHeroName,
