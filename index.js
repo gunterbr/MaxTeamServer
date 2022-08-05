@@ -1,17 +1,9 @@
 const express = require('express')
 const mysql = require('mysql2')
 const bodyParser = require('body-parser')
-const fileupload = require("express-fileupload")
-const cors = require("cors")
+const multer = require("multer")
 
 const app = express()
-
-app.use(cors())
-app.use(
-  fileupload({
-      createParentPath: true,
-  }),
-)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '10mb' }))
@@ -36,6 +28,8 @@ const connection = mysql.createPool({
 	user: process.env.MYSQL_USER,
 	password: process.env.MYSQL_PASSWORD,
 })
+
+const upload = multer({ dest: "uploads/" })
 
 app.get('/', (req, res) => {
   res.send('Welcome to my API!')
@@ -118,17 +112,12 @@ app.post('/inscricao', (req, res) => {
 
 })
 
-app.post('/upload', (req, res) => {
-
-  const { superHeroName } = req.body
-  const { uploadFile } = req.files
-
-  res.send({
-    name: superHeroName,
-    file: uploadFile
-  })
-
-})
+app.post("/upload", upload.array("files"), uploadFiles)
+function uploadFiles(req, res) {
+    console.log(req.body)
+    console.log(req.files)
+    res.json({ message: "Successfully uploaded files" })
+}
 
 //Confirmar Inscrição
 app.put('/confirmar', (req, res) => {
