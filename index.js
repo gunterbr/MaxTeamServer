@@ -114,7 +114,7 @@ app.post('/inscricao', (req, res) => {
 })
 
 app.post("/upload", upload.array('files', 2), (req, res) => {
-  console.log(req.body, req.files)
+  console.log(req.body, req.file.filename)
   res.send('ok')
 })
 
