@@ -123,9 +123,9 @@ app.post('/upload', (req, res) => {
   const { superHeroName } = req.body
   const { uploadFile } = req.files
 
-  res.status(500).send({
+  res.send({
     name: superHeroName,
-    file: uploadFile.name
+    file: uploadFile
   })
 
 })
