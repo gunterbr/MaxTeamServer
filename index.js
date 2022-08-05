@@ -113,12 +113,21 @@ app.post('/inscricao', (req, res) => {
 
 })
 
-app.post("/upload", upload.array("files"), uploadFiles)
-function uploadFiles(req, res) {
-    res.send(req.body.evento)
-    console.log(req.files)
-    res.json({ message: "Successfully uploaded files" })
-}
+app.post("/upload", (req, res) => {
+  const { nomeCandidato, evento, numeroInscricao } = req.body
+  const { filename, mimetype } = req.files
+
+  if(upload.array('files', 2)) {
+    res.send({
+      filename: filename,
+      mime: mimetype,
+      nome: nomeCandidato,
+      evento: evento,
+      numeroInscricao: numeroInscricao
+    })
+  }
+
+})
 
 //Confirmar Inscrição
 app.put('/confirmar', (req, res) => {
