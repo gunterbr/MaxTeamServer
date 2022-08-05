@@ -115,7 +115,7 @@ app.post('/inscricao', (req, res) => {
 
 app.post("/upload", upload.array("files"), uploadFiles)
 function uploadFiles(req, res) {
-    console.log(req.body)
+    res.send(req.body.evento)
     console.log(req.files)
     res.json({ message: "Successfully uploaded files" })
 }
