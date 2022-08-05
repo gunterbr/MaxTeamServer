@@ -118,7 +118,7 @@ app.post("/upload", (req, res) => {
   const { filename, mimetype } = req.files
 
   if(upload.array('files', 2)) {
-    res.send({
+    console.log({
       filename: filename,
       mime: mimetype,
       nome: nomeCandidato,
