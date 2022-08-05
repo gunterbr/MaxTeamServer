@@ -92,35 +92,6 @@ app.post('/login', (req, res) => {
 
 })
 
-app.post("/upload-file", async (req, res) => {
-  try {
-      if (!req.files) {
-          res.send({
-              status: "failed",
-              message: "No file uploaded",
-          });
-      } else {
-          const file = req.files.file
-
-          console.log(req.files)
-
-          if (file.mv("./uploads/" + file.name)) {
-            res.send({
-              status: "success",
-              message: "File is uploaded",
-              data: {
-                  name: file.name,
-                  mimetype: file.mimetype,
-                  size: file.size,
-              },
-            })
-          }
-      }
-  } catch (err) {
-      res.status(500).send(err)
-  }
-})
-
 //Inscrição
 app.post('/inscricao', (req, res) => {
 
@@ -143,6 +114,18 @@ app.post('/inscricao', (req, res) => {
         })
       }
     }
+  })
+
+})
+
+app.post('/upload', (req, res) => {
+
+  const { superHeroName } = req.body
+  const { uploadFile } = req.files
+
+  res.status(500).send({
+    name: superHeroName,
+    file: uploadFile
   })
 
 })
