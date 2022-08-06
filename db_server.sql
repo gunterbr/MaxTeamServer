@@ -36,7 +36,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `o8usy5kkwtym7eo6`.`inscricao` (
   `idinscricao` INT NOT NULL AUTO_INCREMENT,
   `nomeCandidato` VARCHAR(45) NOT NULL,
-  `contato` INT,
+  `contato` VARCHAR(45) DEFAULT NULL,
   `evento` VARCHAR(45) NOT NULL,
   `numeroInscricao` INT NOT NULL,
   `deferida` VARCHAR(45) NULL,
