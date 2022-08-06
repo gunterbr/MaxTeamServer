@@ -114,6 +114,7 @@ app.post('/login', (req, res) => {
 app.post("/inscricao", upload.array('files', 2), async (req, res) => {
   const body = JSON.parse(JSON.stringify(req.body))
   const file = JSON.parse(JSON.stringify(req.files))
+  console.log(body)
 
   if (!file[0].filename) {
     res.status(400).send('Upload failed!')

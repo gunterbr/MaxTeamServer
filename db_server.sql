@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema gunterbr
+-- Schema o8usy5kkwtym7eo6
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema gunterbr
+-- Schema o8usy5kkwtym7eo6
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `gunterbr` DEFAULT CHARACTER SET utf8 ;
-USE `gunterbr` ;
+CREATE SCHEMA IF NOT EXISTS `o8usy5kkwtym7eo6` DEFAULT CHARACTER SET utf8 ;
+USE `o8usy5kkwtym7eo6` ;
 
 -- -----------------------------------------------------
--- Table `gunterbr`.`login`
+-- Table `o8usy5kkwtym7eo6`.`login`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gunterbr`.`login` (
+CREATE TABLE IF NOT EXISTS `o8usy5kkwtym7eo6`.`login` (
   `idlogin` INT NOT NULL AUTO_INCREMENT,
   `user` VARCHAR(45) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
@@ -31,12 +31,12 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `gunterbr`.`inscricao`
+-- Table `o8usy5kkwtym7eo6`.`inscricao`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gunterbr`.`inscricao` (
+CREATE TABLE IF NOT EXISTS `o8usy5kkwtym7eo6`.`inscricao` (
   `idinscricao` INT NOT NULL AUTO_INCREMENT,
   `nomeCandidato` VARCHAR(45) NOT NULL,
-  `contato` INT NULL,
+  `contato` INT,
   `evento` VARCHAR(45) NOT NULL,
   `numeroInscricao` INT NOT NULL,
   `deferida` VARCHAR(45) NULL,
@@ -48,9 +48,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `gunterbr`.`comprovante`
+-- Table `o8usy5kkwtym7eo6`.`comprovante`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gunterbr`.`comprovante` (
+CREATE TABLE IF NOT EXISTS `o8usy5kkwtym7eo6`.`comprovante` (
   `idcomprovante` INT NOT NULL AUTO_INCREMENT,
   `fieldname` VARCHAR(45) NULL,
   `originalname` VARCHAR(45) NULL,
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `gunterbr`.`comprovante` (
   INDEX `fk_comprovante_inscricao_idx` (`fk_numeroInscricao` ASC) VISIBLE,
   CONSTRAINT `fk_comprovante_inscricao`
     FOREIGN KEY (`fk_numeroInscricao`)
-    REFERENCES `gunterbr`.`inscricao` (`numeroInscricao`)
+    REFERENCES `o8usy5kkwtym7eo6`.`inscricao` (`numeroInscricao`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
