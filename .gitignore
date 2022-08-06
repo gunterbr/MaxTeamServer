@@ -10,6 +10,7 @@
 
 # production
 /build
+db_server.sql
 
 # misc
 .DS_Store

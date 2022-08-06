@@ -1,13 +1,16 @@
 const express = require('express')
 const mysql = require('mysql2')
 const bodyParser = require('body-parser')
-const cors = require("cors")
+const cors = require('cors')
 const multer = require("multer")
 
 const app = express()
+app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '10mb' }))
+
+const PORT = process.env.PORT || 3001
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -30,7 +33,33 @@ const connection = mysql.createPool({
 	password: process.env.MYSQL_PASSWORD,
 })
 
-const upload = multer({ dest: "uploads/" })
+//const connection = mysql.createPool({
+//	host: 'localhost',
+//	database: 'gunterbr',
+//	user: 'root',
+//	password: '',
+//})
+
+// Configuração de armazenamento
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'public/src/img/')
+  },
+  filename: function (req, file, cb) {
+      // Extração da extensão do arquivo original:
+      const extensaoArquivo = file.originalname.split('.')[1];
+
+      // Cria um código randômico que será o nome do arquivo
+      const novoNomeArquivo = require('crypto')
+          .randomBytes(8)
+          .toString('hex');
+
+      // Indica o novo nome do arquivo:
+      cb(null, `${novoNomeArquivo}.${extensaoArquivo}`)
+  }
+});
+
+const upload = multer({ storage });
 
 app.get('/', (req, res) => {
   res.send('Welcome to my API!')
@@ -88,34 +117,47 @@ app.post('/login', (req, res) => {
 })
 
 //Inscrição
-app.post('/inscricao', (req, res) => {
+app.post("/inscricao", upload.array('files', 2), async (req, res) => {
+  const body = JSON.parse(JSON.stringify(req.body))
+  const file = JSON.parse(JSON.stringify(req.files))
 
-  const { nomeCandidato, evento, pagamento, numeroInscricao } = req.body
+  if (!file[0].filename) {
+    res.status(400).send('Upload failed!')
+  } else {
+    const { nomeCandidato, evento, numeroInscricao } = body
+    const { fieldname, originalname, encoding, mimetype, destination, filename, path, size } = file[0]
 
-  const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
-  const query = `INSERT INTO inscricao (nomeCandidato, evento, pagamento, numeroInscricao) VALUES (?, ?, ?, ?)`
+    const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
+    const query = `INSERT INTO inscricao (nomeCandidato, evento, numeroInscricao) VALUES (?, ?, ?)`
+    const fileDB = `INSERT INTO comprovante (fieldname, originalname, encoding, mimetype, destination, filename, path, size, fk_numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
-  connection.query(check, numeroInscricao, (err, count) => {
-    const result = JSON.stringify(count[0].equalInscricao)
-    if (err) {
-      res.status(500).send(err)
-    } else {
-      if (result > 0) {
-        res.status(400).send('Tivemos um problema ao gerar seu número de inscrição :(\nPor favor, tente novamente!')
+    connection.query(check, numeroInscricao, (err, count) => {
+      const result = JSON.stringify(count[0].equalInscricao)
+      if (err) {
+        res.status(500).send(err)
       } else {
-        connection.query(query, [nomeCandidato, evento, pagamento, numeroInscricao], err => {
-          if (err) throw err
-          res.status(200).send('Inscrição realizada!')
-        })
+        if (result > 0) {
+          res.status(400).send('Tivemos um problema ao gerar seu número de inscrição :(\n\nTente novamente!')
+        } else {
+          connection.query(query, [nomeCandidato, evento, numeroInscricao], err => {
+            if (err) {
+              res.status(500).send(err)
+            } else {
+              connection.query(fileDB, [fieldname, originalname, encoding, mimetype, destination, filename, path, size, numeroInscricao], err => {
+                if (err) {
+                  res.status(200).send('O sistema não conseguiu receber o seu comprovante.\n\nTente novamente!' + err)
+                } else {
+                  res.status(200).send('Inscrição finalizada com sucesso!')
+                }
+              })
+            }
+          })
+
+        }
       }
-    }
-  })
+    })
+  }
 
-})
-
-app.post("/upload", upload.array('files', 2), (req, res) => {
-  console.log(req.body, req.files)
-  res.send('Sucess')
 })
 
 //Confirmar Inscrição
@@ -123,19 +165,30 @@ app.put('/confirmar', (req, res) => {
 
   const { deferida, responsavel, id, numeroInscricao } = req.body
 	
-	const query = `UPDATE inscricao SET deferida = ?, responsavel = ? WHERE id = ? AND numeroInscricao = ?`
-
-	connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
+	const query = `UPDATE inscricao SET deferida = ?, responsavel = ? WHERE idinscricao = ? AND numeroInscricao = ?`
+  connection.query(query, [deferida, responsavel, id, numeroInscricao], (err, result) => {
 	  const count = JSON.stringify(result.affectedRows)
     if (err) {
       res.status(500).send(err)
     } else {
       if (count > 0) {
-        res.status(200).send('Inscrição confirmada com sucesso!')
+        res.status(200).send({
+          status: `${deferida}`,
+          message: 'O registro foi atualizado.'
+        })
       }
     }
 	})
 
 })
 
-app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`))
+app.get("/getInscritos", (req, res) => {
+	const mysql =
+    'SELECT * FROM inscricao INNER JOIN comprovante ON inscricao.numeroInscricao = comprovante.fk_numeroInscricao ORDER BY inscricao.idinscricao DESC'
+    connection.query(mysql, (err, result) => {
+	  if (err) res.send(err)
+	  res.send(result)
+	})
+})
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
