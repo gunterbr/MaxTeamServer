@@ -6,6 +6,7 @@ const multer = require("multer")
 
 const app = express()
 app.use(cors())
+app.use('/uploads', express.static('./uploads'))
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({ limit: '10mb' }))
@@ -33,17 +34,10 @@ const connection = mysql.createPool({
 	password: process.env.MYSQL_PASSWORD,
 })
 
-//const connection = mysql.createPool({
-//	host: 'localhost',
-//	database: 'gunterbr',
-//	user: 'root',
-//	password: '',
-//})
-
 // Configuração de armazenamento
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-      cb(null, 'public/src/img/')
+      cb(null, './uploads')
   },
   filename: function (req, file, cb) {
       // Extração da extensão do arquivo original:
