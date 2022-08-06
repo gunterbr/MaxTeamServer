@@ -168,6 +168,7 @@ app.put('/confirmar', (req, res) => {
     } else {
       if (count > 0) {
         res.status(200).send({
+          id: `${id}`,
           status: `${deferida}`,
           message: 'O registro foi atualizado.'
         })
