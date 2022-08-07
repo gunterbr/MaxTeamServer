@@ -119,11 +119,11 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
   if (!file[0].filename) {
     res.status(400).send('Upload failed!')
   } else {
-    const { nomeCandidato, contato, evento, numeroInscricao } = body
+    const { nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao } = body
     const { fieldname, originalname, encoding, mimetype, destination, filename, path, size } = file[0]
 
     const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
-    const query = `INSERT INTO inscricao (nomeCandidato, contato, evento, numeroInscricao) VALUES (?, ?, ?, ?)`
+    const query = `INSERT INTO inscricao (nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     const fileDB = `INSERT INTO comprovante (fieldname, originalname, encoding, mimetype, destination, filename, path, size, fk_numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
     connection.query(check, numeroInscricao, (err, count) => {
@@ -137,7 +137,7 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
             msg:'Tivemos um problema ao gerar seu número de inscrição :(\n\nTente novamente!'
           })
         } else {
-          connection.query(query, [nomeCandidato, contato, evento, numeroInscricao], err => {
+          connection.query(query, [nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao], err => {
             if (err) {
               res.status(500).send(err)
             } else {
