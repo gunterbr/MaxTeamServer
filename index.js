@@ -132,7 +132,10 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
         res.status(500).send(err)
       } else {
         if (result > 0) {
-          res.status(400).send('Tivemos um problema ao gerar seu número de inscrição :(\n\nTente novamente!')
+          res.status(400).send({
+            status:'warning',
+            msg:'Tivemos um problema ao gerar seu número de inscrição :(\n\nTente novamente!'
+          })
         } else {
           connection.query(query, [nomeCandidato, contato, evento, numeroInscricao], err => {
             if (err) {
@@ -140,9 +143,15 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
             } else {
               connection.query(fileDB, [fieldname, originalname, encoding, mimetype, destination, filename, path, size, numeroInscricao], err => {
                 if (err) {
-                  res.status(200).send('O sistema não conseguiu receber o seu comprovante.\n\nTente novamente!' + err)
+                  res.status(200).send({
+                    status:'warning',
+                    msg:'O sistema não conseguiu receber o seu comprovante.\n\nTente novamente!' + err
+                  })
                 } else {
-                  res.status(200).send('Inscrição finalizada com sucesso!')
+                  res.status(200).send({
+                    status:'success',
+                    msg: 'Inscrição finalizada com sucesso!'
+                  })
                 }
               })
             }
