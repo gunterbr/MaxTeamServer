@@ -63,7 +63,7 @@ const upload = multer({
     s3: s3,
     bucket: 'maxteam',
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    filename: function (req, file, cb) {
+    metadata: function (req, file, cb) {
       const extensao = file.originalname.split('.')[1]
       const novoNome = require('crypto')
           .randomBytes(8)
@@ -142,7 +142,7 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
     res.status(400).send('Upload failed!')
   } else {
     const { nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao } = body
-    const { fieldname, originalname, encoding, mimetype, bucket, filename, location, size } = file[0]
+    const { fieldname, originalname, encoding, mimetype, bucket, metadata, location, size } = file[0]
 
     const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
     const query = `INSERT INTO inscricao (nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
@@ -163,7 +163,7 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
             if (err) {
               res.status(500).send(err)
             } else {
-              connection.query(fileDB, [fieldname, originalname, encoding, mimetype, bucket, filename, location, size, numeroInscricao], err => {
+              connection.query(fileDB, [fieldname, originalname, encoding, mimetype, bucket, metadata, location, size, numeroInscricao], err => {
                 if (err) {
                   res.status(200).send({
                     status:'warning',
