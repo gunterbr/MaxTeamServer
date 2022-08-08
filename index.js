@@ -63,7 +63,6 @@ const upload = multer({
     s3: s3,
     bucket: 'maxteam',
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: 'public-read',
     metadata: function (req, file, cb) {
       const extensao = file.originalname.split('.')[1];
       const novoNome = require('crypto')
