@@ -137,13 +137,12 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
   const file = JSON.parse(JSON.stringify(req.files))
   console.log(body)
   console.log(file)
-  console.log(res)
 
   if (!file[0].originalname) {
     res.status(400).send('Upload failed!')
   } else {
     const { nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao } = body
-    const { fieldname, originalname, encoding, mimetype, bucket, filename, location, size } = file[0]
+    const { fieldname, originalname, encoding, mimetype, destination, filename, path, size } = file[0]
 
     const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
     const query = `INSERT INTO inscricao (nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
@@ -164,7 +163,7 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
             if (err) {
               res.status(500).send(err)
             } else {
-              connection.query(fileDB, [fieldname, originalname, encoding, mimetype, bucket, filename, location, size, numeroInscricao], err => {
+              connection.query(fileDB, [fieldname, originalname, encoding, mimetype, destination, filename, path, size, numeroInscricao], err => {
                 if (err) {
                   res.status(200).send({
                     status:'warning',
