@@ -142,12 +142,12 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
     res.status(400).send('Upload failed!')
   } else {
     const { nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao } = body
-    const { fieldname, originalname, encoding, mimetype, destination, filename, path, size } = file[0]
+    const { fieldname, originalname, encoding, mimetype, bucket, filename, location, size } = file[0]
 
     const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
     const query = `INSERT INTO inscricao (nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-    const fileDB = `INSERT INTO comprovante (fieldname, originalname, encoding, mimetype, bucket, filename, location, size, fk_numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-
+    const fileDB = `INSERT INTO comprovante (fieldname, originalname, encoding, mimetype, destination, filename, path, size, fk_numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    
     connection.query(check, numeroInscricao, (err, count) => {
       const result = JSON.stringify(count[0].equalInscricao)
       if (err) {
@@ -163,7 +163,7 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
             if (err) {
               res.status(500).send(err)
             } else {
-              connection.query(fileDB, [fieldname, originalname, encoding, mimetype, destination, filename, path, size, numeroInscricao], err => {
+              connection.query(fileDB, [fieldname, originalname, encoding, mimetype, bucket, filename, location, size, numeroInscricao], err => {
                 if (err) {
                   res.status(200).send({
                     status:'warning',
