@@ -70,7 +70,7 @@ const storage = {
   })
 }
 
-const upload = multer(storage['s3'])
+const upload = multer(storage['local'])
 
 app.get('/', (req, res) => {
   res.send('Welcome to my API!')
