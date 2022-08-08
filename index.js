@@ -48,13 +48,13 @@ const connection = mysql.createPool({
 //      cb(null, './uploads')
 //  },
 //  filename: function (req, file, cb) {
-//      const extensaoArquivo = file.originalname.split('.')[1];
+//      const extensaoArquivo = file.originalname.split('.')[1]
 //      const novoNomeArquivo = require('crypto')
 //          .randomBytes(8)
 //          .toString('hex')
 //      cb(null, `${novoNomeArquivo}.${extensaoArquivo}`)
 //  }
-//});
+//})
 //
 //const upload = multer({ storage })
 
@@ -64,7 +64,7 @@ const upload = multer({
     bucket: 'maxteam',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     filename: function (req, file, cb) {
-      const extensao = file.originalname.split('.')[1];
+      const extensao = file.originalname.split('.')[1]
       const novoNome = require('crypto')
           .randomBytes(8)
           .toString('hex')
