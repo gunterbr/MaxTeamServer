@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.142.0",
     "aws-sdk": "^2.1190.0",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",

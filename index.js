@@ -3,9 +3,14 @@ const mysql = require('mysql2')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const multer = require("multer")
-const crypto = require("crypto")
-const aws = require("aws-sdk")
-const multerS3 = require("multer-s3")
+const { S3Client } = require('@aws-sdk/client-s3')
+const multerS3 = require('multer-s3')
+
+const s3 = new S3Client({
+  aws_access_key_id: process.env.AWS_ID,
+  aws_secret_access_key: process.env.AWS_KEY,
+  region: process.env.AWS_REGION
+})
 
 const app = express()
 app.use(cors())
@@ -38,39 +43,39 @@ const connection = mysql.createPool({
 })
 
 // Configuração de armazenamento
-const storage = {
-  local: multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, './uploads')
-  },
-  filename: function (req, file, cb) {
-      const extensao = file.originalname.split('.')[1]
-      const sendFile = require('crypto')
-          .randomBytes(8)
-          .toString('hex')
-      cb(null, `${sendFile}.${extensao}`)
-  }
-  }),
+//const storage = multer.diskStorage({
+//  destination: function (req, file, cb) {
+//      cb(null, './uploads')
+//  },
+//  filename: function (req, file, cb) {
+//      const extensaoArquivo = file.originalname.split('.')[1];
+//      const novoNomeArquivo = require('crypto')
+//          .randomBytes(8)
+//          .toString('hex')
+//      cb(null, `${novoNomeArquivo}.${extensaoArquivo}`)
+//  }
+//});
+//
+//const upload = multer({ storage })
 
-  s3: multerS3({
-    s3: new aws.S3(),
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
     bucket: 'maxteam',
-    AWS_ACCESS_KEY_ID: process.env.AWS_ID,
-    AWS_SECRET_ACCESS_KEY: process.env.AWS_KEY,
-    AWS_DEFAULT_REGION: process.env.AWS_REGION,
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: "public-read",
-    key: function (req, file, cb) {
-      const extensao = file.originalname.split('.')[1]
-      const sendFile = require('crypto')
+    acl: 'public-read',
+    metadata: function (req, file, cb) {
+      const extensao = file.originalname.split('.')[1];
+      const novoNome = require('crypto')
           .randomBytes(8)
           .toString('hex')
-      cb(null, `${sendFile}.${extensao}`)
-    },
+      cb(null, `${novoNome}.${extensao}`)
+  },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString())
+    }
   })
-}
-
-const upload = multer(storage['local'])
+})
 
 app.get('/', (req, res) => {
   res.send('Welcome to my API!')
