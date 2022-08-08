@@ -212,7 +212,7 @@ app.put('/confirmar', (req, res) => {
 
 app.get("/getInscritos", (req, res) => {
 	const mysql =
-    'SELECT *, TIMESTAMPDIFF (YEAR, o8usy5kkwtym7eo6.inscricao.nascimento, CURDATE()) as idade FROM o8usy5kkwtym7eo6.inscricao INNER JOIN comprovante ON o8usy5kkwtym7eo6.inscricao.numeroInscricao = o8usy5kkwtym7eo6.comprovante.fk_numeroInscricao ORDER BY o8usy5kkwtym7eo6.inscricao.idinscricao DESC, o8usy5kkwtym7eo6.inscricao.deferida ASC'
+    'SELECT *, TIMESTAMPDIFF (YEAR, o8usy5kkwtym7eo6.inscricao.nascimento, CURDATE()) as idade FROM o8usy5kkwtym7eo6.inscricao INNER JOIN comprovante ON o8usy5kkwtym7eo6.inscricao.numeroInscricao = o8usy5kkwtym7eo6.comprovante.fk_numeroInscricao ORDER BY o8usy5kkwtym7eo6.inscricao.deferida DESC'
     connection.query(mysql, (err, result) => {
 	  if (err) res.send(err)
 	  res.send(result)
