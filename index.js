@@ -3,6 +3,9 @@ const mysql = require('mysql2')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const multer = require("multer")
+const crypto = require("crypto")
+const aws = require("aws-sdk")
+const multerS3 = require("multer-s3")
 
 const app = express()
 app.use(cors())
@@ -35,25 +38,39 @@ const connection = mysql.createPool({
 })
 
 // Configuração de armazenamento
-const storage = multer.diskStorage({
+const storage = {
+  local: multer.diskStorage({
   destination: function (req, file, cb) {
       cb(null, './uploads')
   },
   filename: function (req, file, cb) {
-      // Extração da extensão do arquivo original:
-      const extensaoArquivo = file.originalname.split('.')[1];
-
-      // Cria um código randômico que será o nome do arquivo
-      const novoNomeArquivo = require('crypto')
+      const extensao = file.originalname.split('.')[1]
+      const sendFile = require('crypto')
           .randomBytes(8)
-          .toString('hex');
-
-      // Indica o novo nome do arquivo:
-      cb(null, `${novoNomeArquivo}.${extensaoArquivo}`)
+          .toString('hex')
+      cb(null, `${sendFile}.${extensao}`)
   }
-});
+  }),
 
-const upload = multer({ storage });
+  s3: multerS3({
+    s3: new aws.S3(),
+    bucket: 'maxteam',
+    AWS_ACCESS_KEY_ID: process.env.AWS_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_KEY,
+    AWS_DEFAULT_REGION: process.env.AWS_REGION,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    acl: "public-read",
+    key: function (req, file, cb) {
+      const extensao = file.originalname.split('.')[1]
+      const sendFile = require('crypto')
+          .randomBytes(8)
+          .toString('hex')
+      cb(null, `${sendFile}.${extensao}`)
+    },
+  })
+}
+
+const upload = multer(storage['s3'])
 
 app.get('/', (req, res) => {
   res.send('Welcome to my API!')
