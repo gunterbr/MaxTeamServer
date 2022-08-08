@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `o8usy5kkwtym7eo6`.`comprovante` (
   `mimetype` VARCHAR(45) NULL,
   `destination` VARCHAR(45) NULL,
   `filename` VARCHAR(45) NULL,
-  `path` VARCHAR(45) NULL,
+  `path` VARCHAR(100) NULL,
   `size` VARCHAR(45) NULL,
   `fk_numeroInscricao` INT NOT NULL,
   PRIMARY KEY (`idcomprovante`),
