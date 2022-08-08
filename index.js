@@ -7,9 +7,8 @@ const { S3Client } = require('@aws-sdk/client-s3')
 const multerS3 = require('multer-s3')
 
 const s3 = new S3Client({
-  accessKeyId: process.env.AWS_ID,
-  secretAccessKey: process.env.AWS_KEY,
-  region: process.env.AWS_ID
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 })
 
 const app = express()
