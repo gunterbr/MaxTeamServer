@@ -160,7 +160,7 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
             msg:'Tivemos um problema ao gerar seu número de inscrição :(\n\nTente novamente!'
           })
         } else {
-          connection.query(query, [nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao, 'wait'], err => {
+          connection.query(query, [nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao, 'zzz'], err => {
             if (err) {
               res.status(500).send(err)
             } else {
