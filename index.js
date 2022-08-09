@@ -146,7 +146,7 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
     const { fieldname, originalname, encoding, mimetype, bucket, metadata, location, size } = file[0]
 
     const check = `SELECT COUNT(*) AS equalInscricao FROM inscricao WHERE numeroInscricao = ?`
-    const query = `INSERT INTO inscricao (nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    const query = `INSERT INTO inscricao (nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao, deferida) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     const fileDB = `INSERT INTO comprovante (fieldname, originalname, encoding, mimetype, destination, filename, path, size, fk_numeroInscricao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     
     connection.query(check, numeroInscricao, (err, count) => {
@@ -160,7 +160,7 @@ app.post("/inscricao", upload.array('files', 2), async (req, res) => {
             msg:'Tivemos um problema ao gerar seu número de inscrição :(\n\nTente novamente!'
           })
         } else {
-          connection.query(query, [nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao], err => {
+          connection.query(query, [nomeCandidato, nascimento, contato, evento, camiseta, sexo, categoria, numeroInscricao, 'wait'], err => {
             if (err) {
               res.status(500).send(err)
             } else {
@@ -212,7 +212,7 @@ app.put('/confirmar', (req, res) => {
 
 app.get("/getInscritos", (req, res) => {
 	const mysql =
-    'SELECT *, TIMESTAMPDIFF (YEAR, o8usy5kkwtym7eo6.inscricao.nascimento, CURDATE()) as idade FROM o8usy5kkwtym7eo6.inscricao INNER JOIN comprovante ON o8usy5kkwtym7eo6.inscricao.numeroInscricao = o8usy5kkwtym7eo6.comprovante.fk_numeroInscricao ORDER BY o8usy5kkwtym7eo6.inscricao.deferida DESC'
+    'SELECT *, TIMESTAMPDIFF (YEAR, o8usy5kkwtym7eo6.inscricao.nascimento, CURDATE()) as idade FROM o8usy5kkwtym7eo6.inscricao INNER JOIN comprovante ON o8usy5kkwtym7eo6.inscricao.numeroInscricao = o8usy5kkwtym7eo6.comprovante.fk_numeroInscricao ORDER BY o8usy5kkwtym7eo6.inscricao.deferida DESC, o8usy5kkwtym7eo6.inscricao.idinscricao DESC'
     connection.query(mysql, (err, result) => {
 	  if (err) res.send(err)
 	  res.send(result)
